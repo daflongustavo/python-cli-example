@@ -1,0 +1,6 @@
+﻿SHA256: DCB5A82869B07E65548ACE68CED6D216DC9A5E4E389138FB970915DE55029A09
+
+To verify the authenticity of the file, you can use a hash tool such as sha256sum. Example:
+
+```bash
+sha256sum Python-Phrase.1.0.0.nupkg
