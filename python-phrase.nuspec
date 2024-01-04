@@ -4,8 +4,8 @@
     <id>python-phrase</id>
     <version>1.0.0</version>
     <title>Python Phrase</title>
-    <authors>SevenClouds Technologies</authors>
-    <owners>SevenClouds Technologies</owners>
+    <authors>daflongustavo</authors>
+    <owners>daflongustavo</owners>
     <projectUrl>https://github.com/daflongustavo/python-cli-example</projectUrl>
     <licenseUrl>https://github.com/daflongustavo/python-cli-example/blob/main/LICENSE</licenseUrl>
     <packageSourceUrl>https://github.com/daflongustavo/python-cli-example/</packageSourceUrl>
@@ -17,7 +17,7 @@
     <description>First release for this Seven Technologies Clouds API, the PythonRestCLI</description>
     <releaseNotes>Sandbox version</releaseNotes>
     <copyright>Copyright (c) 2023</copyright>
-    <tags>python, cli, db, mysql, postgres, database</tags>
+    <tags>python cli db mysql postgres database</tags>
   </metadata>
   <files>
     <file src="./dist/python-phrase.exe" target="tools" />
