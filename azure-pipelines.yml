@@ -3,7 +3,7 @@
 
 parameters:
   - name: USERS_EMAILS_TO_NOTIFY
-    type: object
+    type: string
     default: 
     - 'gustavodaflon@seventechnologies.cloud'
     - 'leonardoviana@seventechnologies.cloud'
