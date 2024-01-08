@@ -78,7 +78,7 @@ jobs:
   steps: 
   - powershell: |
       # Execute os comandos após a aprovação manual
-      pyinstaller $(spec_file_name).spec
+      pyinstaller $(app_name).spec
 
       # Execute os comandos e substitua os valores em VERIFICATION.txt
       $sha256Hash = Get-FileHash -Path "./dist/${app_name}.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
