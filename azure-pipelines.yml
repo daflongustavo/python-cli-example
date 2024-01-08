@@ -35,8 +35,8 @@ jobs:
         echo "Versions are the same. Skipping PyPI upload."
       fi
 
-- job: PublishPackageToChocolatey
-  displayName: 'Publish Package to Chocolatey'
+- job: CheckChocoCLIVersion
+  displayName: 'Check CLI version'
   pool:
     vmImage: 'windows-latest'
   variables:
