@@ -35,17 +35,14 @@ jobs:
         echo "Versions are the same. Skipping PyPI upload."
       fi
 
-- job: PublishPackageToChocolatey
+- job: VerifyVersion
+  displayName: 'Verify Version'
   pool:
     vmImage: 'windows-latest'
   variables:
     NEEDS_MANUAL_APPROVAL: $[equals(variables['choco_cli_version'], variables['nuspecVersion'])]
   steps:
   - powershell: |
-      pip install pyinstaller
-    displayName: 'Install PyInstaller'
-
-  - script: |
       # Obter a versão do arquivo .nuspec
       $nuspecVersion = [xml](Get-Content -Path path/to/your.nuspec).package.metadata.version
 
@@ -55,36 +52,45 @@ jobs:
           exit 1
       }
       elseif ($env:choco_cli_version -eq $nuspecVersion) {
-          # Aprovação manual
-          if ($env:NEEDS_MANUAL_APPROVAL -eq $true) {
-              Write-Host "Requesting manual approval..."
-              
-              # Task de validação manual
-              - task: ManualValidation@0
-                timeoutInMinutes: 1440
-                inputs:
-                  notifyUsers: |
-                    ${{ parameters.USERS_EMAILS_TO_NOTIFY }}
-                  instructions: "Are you sure you want to update the CLI version? A new package will be generated and will be sent to Chocolatey's approval process."
-                  onTimeout: "reject"
-                  
-              # Se aprovado, continue
-              Write-Host "Manual approval received. Continuing..."
-          }
-
-          # Se aceitar a aprovação manual ou não for necessária
-          # Execute os comandos após pyinstaller
-          pyinstaller $(spec_file_name).spec
-
-          # Execute os comandos e substitua os valores em VERIFICATION.txt
-          $sha256Hash = Get-FileHash -Path "./dist/${app_name}.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
-          $md5Hash = Get-FileHash "./dist/${app_name}.exe" -Algorithm MD5 | Select-Object -ExpandProperty Hash
-
-          # Substitua os valores em VERIFICATION.txt
-          $verificationPath = "./tools/VERIFICATION.txt"
-          (Get-Content -Path $verificationPath) -replace 'MD5: .+', "MD5: $md5Hash" -replace 'SHA-256: .+', "SHA-256: $sha256Hash" | Set-Content -Path $verificationPath
+          Write-Host "The versions match. Proceeding to Manual Approval..."
       }
       else {
           Write-Host "The choco_cli_version is greater than the version in .nuspec. No additional action needed."
       }
-    displayName: 'Publish Package to Chocolatey'
+    displayName: 'Verify Version'
+
+- job: ManualApproval
+  displayName: 'Manual Approval'
+  dependsOn: VerifyVersion
+  pool:
+    vmImage: 'server'
+  steps:
+  - task: ManualValidation@0
+    timeoutInMinutes: 1440
+    inputs:
+      notifyUsers: ${{ parameters.USERS_EMAILS_TO_NOTIFY }}
+      instructions: "Are you sure you want to update the CLI version? A new package will be generated and will be sent to Chocolatey's approval process."
+      onTimeout: "reject"
+
+- job: ContinueAfterApproval
+  displayName: 'Continue After Approval'
+  dependsOn: ManualApproval
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - powershell: |
+      # Execute os comandos após a aprovação manual
+      pyinstaller $(spec_file_name).spec
+
+      # Execute os comandos e substitua os valores em VERIFICATION.txt
+      $sha256Hash = Get-FileHash -Path "./dist/${app_name}.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+      $md5Hash = Get-FileHash "./dist/${app_name}.exe" -Algorithm MD5 | Select-Object -ExpandProperty Hash
+
+      # Substitua os valores em VERIFICATION.txt
+      $verificationPath = "./tools/VERIFICATION.txt"
+      (Get-Content -Path $verificationPath) -replace 'MD5: .+', "MD5: $md5Hash" -replace 'SHA-256: .+', "SHA-256: $sha256Hash" | Set-Content -Path $verificationPath
+
+      # Continue com os demais comandos após a aprovação manual
+      choco pack
+      choco push $(nupkg_file_name).$(choco_cli_version).nupkg -s https://chocolatey.org/ --api-key $(choco_api_key)
+    displayName: 'Continue After Manual Approval'
