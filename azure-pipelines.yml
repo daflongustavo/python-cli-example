@@ -59,6 +59,10 @@ jobs:
       }
     displayName: 'Verify Version'
 
+- job: manual_approval
+  displayName: Manual Approval
+  pool: server
+  steps:
   - task: ManualValidation@0
     timeoutInMinutes: 1440
     inputs:
@@ -66,6 +70,11 @@ jobs:
       instructions: "Are you sure you want to update the CLI version? A new package will be generated and will be sent to Chocolatey's approval process."
       onTimeout: "reject"
 
+- job: PublishPackageToChocolatey
+  displayName: 'Publish Package to Chocolatey'
+  pool:
+    vmImage: 'windows-latest'
+  steps: 
   - powershell: |
       # Execute os comandos após a aprovação manual
       pyinstaller $(spec_file_name).spec
