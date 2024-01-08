@@ -90,5 +90,5 @@ jobs:
 
       # Continue com os demais comandos após a aprovação manual
       choco pack
-      choco push $(nupkg_file_name).$(choco_cli_version).nupkg -s https://chocolatey.org/ --api-key $(choco_api_key)
+      choco push $(app_name).$(choco_cli_version).nupkg -s https://chocolatey.org/ --api-key $(choco_api_key)
     displayName: 'Continue After Manual Approval'
