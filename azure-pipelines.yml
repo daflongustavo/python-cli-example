@@ -44,7 +44,7 @@ jobs:
   steps:
   - powershell: |
       # Obter a versão do arquivo .nuspec
-      $nuspecVersion = [xml](Get-Content -Path path/to/your.nuspec).package.metadata.version
+      $nuspecVersion = [xml](Get-Content -Path ./python-phrase.nuspec).package.metadata.version
 
       # Comparar com o valor de choco_cli_version
       if ($env:choco_cli_version -lt $nuspecVersion) {
