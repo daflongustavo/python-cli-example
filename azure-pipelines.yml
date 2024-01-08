@@ -78,6 +78,7 @@ jobs:
   steps: 
   - powershell: |
       # Execute os comandos após a aprovação manual
+      pip install pyinstaller
       pyinstaller $(app_name).spec
 
       # Execute os comandos e substitua os valores em VERIFICATION.txt
