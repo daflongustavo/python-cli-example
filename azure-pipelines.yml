@@ -35,8 +35,8 @@ jobs:
         echo "Versions are the same. Skipping PyPI upload."
       fi
 
-- job: VerifyVersion
-  displayName: 'Verify Version'
+- job: PublishPackageToChocolatey
+  displayName: 'Publish Package to Chocolatey'
   pool:
     vmImage: 'windows-latest'
   variables:
@@ -59,12 +59,6 @@ jobs:
       }
     displayName: 'Verify Version'
 
-- job: ManualApproval
-  displayName: 'Manual Approval'
-  dependsOn: VerifyVersion
-  pool:
-    vmImage: 'server'
-  steps:
   - task: ManualValidation@0
     timeoutInMinutes: 1440
     inputs:
@@ -72,12 +66,6 @@ jobs:
       instructions: "Are you sure you want to update the CLI version? A new package will be generated and will be sent to Chocolatey's approval process."
       onTimeout: "reject"
 
-- job: ContinueAfterApproval
-  displayName: 'Continue After Approval'
-  dependsOn: ManualApproval
-  pool:
-    vmImage: 'windows-latest'
-  steps:
   - powershell: |
       # Execute os comandos após a aprovação manual
       pyinstaller $(spec_file_name).spec
