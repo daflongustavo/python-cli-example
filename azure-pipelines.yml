@@ -77,11 +77,11 @@ jobs:
   - powershell: |
       # Execute os comandos após a aprovação manual
       pip install pyinstaller
-      pyinstaller $($(app_name)).spec
+      pyinstaller $(app_name).spec
 
       # Execute os comandos e substitua os valores em VERIFICATION.txt
-      $sha256Hash = Get-FileHash -Path "./dist/$($(app_name)).exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
-      $md5Hash = Get-FileHash "./dist/$($(app_name)).exe" -Algorithm MD5 | Select-Object -ExpandProperty Hash
+      $sha256Hash = Get-FileHash -Path "./dist/$(app_name).exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+      $md5Hash = Get-FileHash "./dist/$(app_name).exe" -Algorithm MD5 | Select-Object -ExpandProperty Hash
 
       # Substitua os valores em VERIFICATION.txt
       $verificationPath = "./tools/VERIFICATION.txt"
@@ -89,5 +89,5 @@ jobs:
 
       # Continue com os demais comandos após a aprovação manual
       choco pack
-      choco push $($(app_name)).$($(choco_cli_version)).nupkg -s https://chocolatey.org/ --api-key $($(choco_api_key))
+      choco push $(app_name).$(choco_cli_version).nupkg -s https://chocolatey.org/ --api-key $(choco_api_key)
     displayName: 'Continue After Manual Approval'
