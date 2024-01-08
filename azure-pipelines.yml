@@ -4,9 +4,9 @@
 parameters:
   - name: USERS_EMAILS_TO_NOTIFY
     type: string
-    default: 
-    - 'gustavodaflon@seventechnologies.cloud'
-    - 'leonardoviana@seventechnologies.cloud'
+    default: |
+      gustavodaflon@seventechnologies.cloud
+      leonardoviana@seventechnologies.cloud
 
 
 variables:
