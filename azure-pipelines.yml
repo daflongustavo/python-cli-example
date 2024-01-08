@@ -40,7 +40,7 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   variables:
-    NEEDS_MANUAL_APPROVAL: $[equals(variables['choco_cli_version'], variables['nuspecVersion'])]
+    NEEDS_MANUAL_APPROVAL: $[eq(variables['choco_cli_version'], variables['nuspecVersion'])]
   steps:
   - powershell: |
       # Obter a versão do arquivo .nuspec
@@ -58,6 +58,7 @@ jobs:
           Write-Host "The choco_cli_version is greater than the version in .nuspec. No additional action needed."
       }
     displayName: 'Verify Version'
+
 
 - job: manual_approval
   displayName: Manual Approval
