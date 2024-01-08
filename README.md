@@ -36,7 +36,8 @@ from setuptools import setup
 
 setup(
     name='<cli-name>',
-    version='1.0.0',
+    version='<cli-version>',
+    description = 'A description of your package'
     py_modules=['<cli_module_name>'],
     install_requires=['Click', '<any_other_requirements_here>', ],
     entry_points={
@@ -107,6 +108,8 @@ exe = EXE(
 pyinstaller <file-name>.spec
 ```
 
+The .exe will be generated
+
 * Run:
 
 ```bash
@@ -121,7 +124,7 @@ Chocolatey will base itself in the .nuspec:
 <package >
   <metadata>
     <id><cli-name></id>
-    <version>1.0.0</version>
+    <version><cli-version></version>
     <title>CLI Name</title>
     <authors>Example Author</authors>
     <owners>Example Owner</owners>

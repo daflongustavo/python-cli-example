@@ -21,5 +21,7 @@
   </metadata>
   <files>
     <file src="./dist/python-phrase.exe" target="tools" />
+    <file src="./tools/VERIFICATION.txt" target="tools" />
+    <file src="./tools/LICENSE.txt" target="tools" />
   </files>
 </package>
